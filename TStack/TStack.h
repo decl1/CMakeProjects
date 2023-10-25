@@ -1,4 +1,7 @@
-// Copyright 2022 Anikin Maksim
+// Copyright 2023 Anikin Maksim
+
+#ifndef TSTACK_H_
+#define TSTACK_H_
 
 template <class T>
 class TStack
@@ -55,3 +58,5 @@ public:
         }
     }
 };
+
+#endif // TSTACK_H_
