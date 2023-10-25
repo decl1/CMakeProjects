@@ -13,10 +13,9 @@ class TStack {
     TStack() : size(0), data(nullptr), _top(-1) { }
 
  public:
-
     explicit TStack(siez_t _size) : size(_size), _top(-1) {
         data = new T[size];
-    } 
+    }
     TStack(const TStack& st) : size(st.size), _top(st._top) {
         std::copy(data, st.data);
     }
