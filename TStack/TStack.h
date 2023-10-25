@@ -12,7 +12,7 @@ class TStack {
     size_t _top;
     TStack() : size(0), data(nullptr), _top(-1) { }
 
-public:
+ public:
 
     explicit TStack(siez_t _size) : size(_size), _top(-1) {
         data = new T[size];
@@ -35,17 +35,17 @@ public:
         return data[_top];
     }
     void pop() {
-        if( isEmpty() )
+        if ( isEmpty() )
             throw;
         top--;
     }
     void push(const T& n) {
-        if( isFull )
+        if ( isFull )
             throw;
         data[++_top] = n;
     }
     void Print() {
-        for(int i = _top; i > -1; i--) {
+        for (int i = _top; i > -1; i--) {
             std::cout << i << " : " << data[i] << std::endl;
         }
     }
