@@ -1,9 +1,9 @@
 // Copyright 2022 Marina Usova
 
-#define _CRT_RAND_S
-
 #ifndef LIB_EXAMPLE_EXAMPLE_H_
 #define LIB_EXAMPLE_EXAMPLE_H_
+
+#define _CRT_RAND_S
 
 #include <stdlib.h>
 #include <iostream>
