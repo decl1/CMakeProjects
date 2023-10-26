@@ -4,6 +4,7 @@
 #define TSTACK_TSTACK_H_
 
 #include <algorithm>
+#include <stdexcept>
 
 template <class T>
 class TStack {
@@ -13,7 +14,7 @@ class TStack {
     TStack() : size(0), data(nullptr), _top(-1) { }
 
  public:
-    explicit TStack(siez_t _size) : size(_size), _top(-1) {
+    explicit TStack(size_t _size) : size(_size), _top(-1) {
         data = new T[size];
     }
     TStack(const TStack& st) : size(st.size), _top(st._top) {
@@ -40,7 +41,7 @@ class TStack {
     }
     void push(const T& n) {
         if ( isFull )
-            throw;
+            throw std::logic_error("push to full stack");
         data[++_top] = n;
     }
     void Print() {
