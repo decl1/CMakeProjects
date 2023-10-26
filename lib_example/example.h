@@ -22,12 +22,11 @@ template <typename T>
 class ExampleClass {
     T* data;
     size_t size;
-    
-public:
 
+ public:
     explicit ExampleClass() : data(nullptr), size(0) {}
     explicit ExampleClass(size_t _size) {
-        if (_size > INT_MAX || _size <= 0) 
+        if (_size > INT_MAX || _size <= 0)
             throw std::length_error(
                 "Size must be positive value, less then MAX_INT.\n");
         size = _size;
@@ -54,7 +53,7 @@ inline int ExampleClass<T>::getSize() const noexcept {
 
 template <typename T>
 inline void ExampleClass<T>::setValue(size_t pos, T value) {
-    if (pos >= size || pos < 0) 
+    if (pos >= size || pos < 0)
         throw std::out_of_range(
             "Dont exist such position.\n");
     data[pos] = value;
@@ -62,7 +61,8 @@ inline void ExampleClass<T>::setValue(size_t pos, T value) {
 
 template <typename T>
 inline T ExampleClass<T>::getValue(size_t pos) const {
-    if (pos >= size || pos < 0) throw std::out_of_range("Dont exist such position.\n");
+    if (pos >= size || pos < 0)
+        throw std::out_of_range("Dont exist such position.\n");
     return data[pos];
 }
 
@@ -78,12 +78,12 @@ std::string ExampleClass<T>::toString() const noexcept {
 template <typename T>
 void ExampleClass<T>::setRandValues(int min, int max) noexcept {
     for (int i = 0; i < size; i++) {
-        data[i] = min + rand() % (max - min + 1);
+        data[i] = min + rand_r() % (max - min + 1);
     }
 }
 
 template <typename T>
-std::ostream& operator<< <T>(std::ostream& out, 
+std::ostream& operator<< <T>(std::ostream& out,
     const ExampleClass<T>& obj) noexcept {
     out << obj.toString();
     return out;
