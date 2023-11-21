@@ -1,0 +1,8 @@
+// Copyright 2023 Anikin Maksim
+
+#ifndef ARITHMETIC_ARITHMETIC_H_
+#define ARITHMETIC_ARITHMETIC_H_
+
+
+
+#endif ARITHMETIC_ARITHMETIC_H_

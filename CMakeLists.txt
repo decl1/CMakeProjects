@@ -7,11 +7,11 @@ include(cmake/function.cmake)
                                  
 
 add_subdirectory(TStack)
-add_subdirectory(TList)
-add_subdirectory(lib_example)    
-add_subdirectory(main)          
+add_subdirectory(TList)   
+add_subdirectory(main)
+add_subdirectory(Arithmetic)        
 
-option(BTEST "build test?" ON)
+option(BTEST "build test?" NO)
 
 if(BTEST)                       
     add_subdirectory(gtest)
