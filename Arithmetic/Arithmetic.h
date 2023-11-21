@@ -5,7 +5,8 @@
 
 #include <iostream>
 
-void printmenus() {
+void printmenus(const std::string equation) {
+    std::cout << "Ваше выражение: " << equation << std::endl << std::endl;
     std::cout << "Меню:" << std::endl;
     std::cout << "\t1. Задать значение переменной" << std::endl;
     std::cout << "\t2. Увидеть обратную польскую запись" << std::endl;
@@ -13,6 +14,11 @@ void printmenus() {
     std::cout << "\t4. Вернуться к заданию функции" << std::endl;
     std::cout << "\t5. Выход" << std::endl << std::endl;
     std::cout << "Выбор: ";
+}
+void equation_enter(std::string& equation) {
+    std::cout << "Ваше выражение: ";
+    std::cin >> equation;
+    system("cls");
 }
 
 #endif ARITHMETIC_ARITHMETIC_H_
