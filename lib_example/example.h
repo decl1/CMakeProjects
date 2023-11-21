@@ -3,6 +3,9 @@
 #ifndef LIB_EXAMPLE_EXAMPLE_H_
 #define LIB_EXAMPLE_EXAMPLE_H_
 
+#define _CRT_RAND_S
+
+#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -78,7 +81,7 @@ std::string ExampleClass<T>::toString() const noexcept {
 template <typename T>
 void ExampleClass<T>::setRandValues(int min, int max) noexcept {
     for (int i = 0; i < size; i++) {
-        data[i] = min + rand_r() % (max - min + 1);
+        data[i] = min + rand() % (max - min + 1);
     }
 }
 
