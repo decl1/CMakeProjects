@@ -20,5 +20,8 @@ void equation_enter(std::string& equation) {
     std::cin >> equation;
     system("cls");
 }
+bool eqution_check(const std::string equation) {
+
+}
 
 #endif ARITHMETIC_ARITHMETIC_H_
