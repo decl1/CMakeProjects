@@ -33,48 +33,47 @@ class TList {
 		last->next = p;
 		last = p;
 	}
-	 void print() {
-		 if (isEmpty()) return;
-		 TNode<T>* p = first;
-		 while (p) {
-			 cout << p->data << " ";
-			 p = p->next;
-		 }
-		 cout << endl;
-	 }
-	 TNode<T>* find(T _data) {
-		 if (isEmpty()) return nullptr;
-		 TNode<T>* p = first;
-		 while (p && p->data != _data) p = p->next;
-		 return (p && p->data != _data) ? p : nullptr;
-	 }
-	 void popfirst() {
-		 if (isEmpty()) return;
-		 TNode<T>* p = first;
-		 first = p->next;
-		 delete p;
-	 }
-	 void poplast() {
-		 if (isEmpty()) return;
-		 if (first == last) {
-			 popfirst();
-			 return;
-		 }
-		 TNode<T>* p = first;
-		 while (p->next != last) p = p->next;
-		 p->next = nullptr;
-		 delete last;
-		 last = p;
-	 }
-	 TNode<T>* operator[] (const int index) {
-		 if (is_empty()) return nullptr;
-		 TNode<T>* p = first;
-		 for (int i = 0; i < index; i++) {
-			 p = p->next;
-			 if (!p) return nullptr;
-		 }
-		 return p;
-	 }
+	void print() {
+		if (isEmpty()) return;
+		TNode<T>* p = first;
+		while (p) {
+			cout << p->data << " ";
+			p = p->next;
+		}	
+		cout << endl;
+	}
+	TNode<T>* find(T _data) {
+		if (isEmpty()) return nullptr;
+		TNode<T>* p = first;
+		while (p && p->data != _data) p = p->next;
+		return (p && p->data != _data) ? p : nullptr;
+	}
+	void popfirst() {
+	if (isEmpty()) return;
+		TNode<T>* p = first;
+		first = p->next;
+		delete p;
+	}
+	void poplast() {
+		if (isEmpty()) return;
+		if (first == last) {
+			popfirst();
+			return;
+		}
+		TNode<T>* p = first;
+		while (p->next != last) p = p->next;
+		p->next = nullptr;
+		delete last;
+		last = p;
+	}
+	TNode<T>* operator[] (const int index) {
+		if (is_empty()) return nullptr;
+		TNode<T>* p = first;
+		for (int i = 0; i < index; i++) {
+			p = p->next;
+			if (!p) return nullptr;
+		}
+		return p;
+	}
 }; 
-
 #endif  // TLIST_TLIST_H_
