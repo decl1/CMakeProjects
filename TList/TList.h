@@ -9,7 +9,7 @@ class TNode {
     TNode* next;
  public:
     TNode(const TNode& node) : data(node.data), next(node.next) { }
-    TNode(T _data, TNode* _next = nullptr) : data(_data), next(_next) { }
+    explicit TNode(T _data, TNode* _next = nullptr) : data(_data), next(_next) { }
     ~TNode() { delete[] next; }
 };
 
@@ -39,7 +39,7 @@ class TList {
         while (p) {
             cout << p->data << " ";
             p = p->next;
-        }	
+        }
         cout << endl;
     }
     TNode<T>* find(T _data) {
@@ -49,7 +49,7 @@ class TList {
         return (p && p->data != _data) ? p : nullptr;
     }
     void popfirst() {
-    if (isEmpty()) return;
+        if (isEmpty()) return;
         TNode<T>* p = first;
         first = p->next;
         delete p;
@@ -75,5 +75,5 @@ class TList {
         }
         return p;
     }
-}; 
+};
 #endif  // TLIST_TLIST_H_
