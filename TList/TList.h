@@ -15,11 +15,11 @@ class TNode {
 
 template <class T>
 class TList {
-	friend class TNode;
+	friend class TNode<T>;
 	TNode* first;
 	TNode* last;
  public:
-	 list() : first(nullptr), last(nullptr) { };
+	 TList() : first(nullptr), last(nullptr) { };
 	 bool isEmpty() {
 		 return first == nullptr;
 	 }
