@@ -8,10 +8,10 @@ include(cmake/function.cmake)
 
 add_subdirectory(TStack)
 add_subdirectory(TList)
-add_subdirectory(lib_example)    
-add_subdirectory(main)          
+add_subdirectory(DSU)  
+add_subdirectory(main)
 
-option(BTEST "build test?" ON)
+option(BTEST "build test?" YES)
 
 if(BTEST)                       
     add_subdirectory(gtest)
