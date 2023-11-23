@@ -8,8 +8,9 @@ include(cmake/function.cmake)
 
 add_subdirectory(TStack)
 add_subdirectory(TList)
-add_subdirectory(DSU)  
-add_subdirectory(main)
+add_subdirectory(DSU)
+add_subdirectory(DSUApp)  
+add_subdirectory(DebugMain)
 
 option(BTEST "build test?" YES)
 
