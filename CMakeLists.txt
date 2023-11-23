@@ -8,8 +8,9 @@ include(cmake/function.cmake)
 
 add_subdirectory(TStack)
 add_subdirectory(TList)   
-add_subdirectory(main)
-add_subdirectory(Arithmetic)        
+add_subdirectory(DebugMain)
+add_subdirectory(Arithmetic)
+add_subdirectory(ArithmeticApp)
 
 option(BTEST "build test?" NO)
 
