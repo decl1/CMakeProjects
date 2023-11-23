@@ -9,7 +9,7 @@ include(cmake/function.cmake)
 add_subdirectory(TStack)
 add_subdirectory(TList)
 add_subdirectory(lib_example)    
-add_subdirectory(DebugMain)          
+add_subdirectory(main)          
 
 option(BTEST "build test?" ON)
 
