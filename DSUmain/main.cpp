@@ -16,6 +16,7 @@ void main() {
         set.union_(x, y);
         system("cls");
     }*/
-    maze lab(8);
-    lab.generate_way_to_finish(1);
+    unionmaze maze(1, 10);
+    maze.generaterightwalls(0);
+    maze.printmaze();
 }
