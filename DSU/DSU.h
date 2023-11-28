@@ -25,6 +25,15 @@ class DSU {
             return val;
         return find(graph_array[val]);
     }
+    int setsize(int setparent, int min, int max) {
+        int _size = 0;
+        for (int i = min; i <= max; i++) {
+            if (find(graph_array[i]) == setparent) {
+                _size++;
+            }
+        }
+        return _size;   
+    }
     int rank(int val) {
         return ranks_array[find(val)];
     }
@@ -33,6 +42,11 @@ class DSU {
         int parent_y = find(y);
         if (parent_x != parent_y)
             graph_array[parent_y] = parent_x;
+    }
+    void clearset() {
+        for (int i = 1; i <= size; i++) {
+            graph_array[i] = i;
+        }
     }
     void print() {
         for (int i = 0; i <= size; i++) {
@@ -68,6 +82,12 @@ public:
         for (int i = 0; i <= height * weight; i++) {
             rightwall[i] = 0;
             bottomwall[i] = 0;
+            if (i % weight == 0) {
+                rightwall[i] = 1;
+            }
+            if (i > weight * (height - 1)) {
+                bottomwall[i] = 1;
+            }
         }
     }
     bool randomBool() {
@@ -75,7 +95,7 @@ public:
     }
     void generaterightwalls(int h) {
         int pos = 1 + weight * h;
-        rightwall[weight + weight * h] = 1;
+        //rightwall[weight + weight * h] = 1;
         for (int i = 0; i < weight - 1; i++) {
             bool randb = randomBool();
             if (rooms.find(pos + i) == rooms.find(pos + i + 1)) {
@@ -94,138 +114,84 @@ public:
         int pos = 1 + weight * h;
         for (int i = 0; i < weight - 1; i++) {
             bool randb = randomBool();
-            if
+            if (checkbott(rooms.find(pos),1 + weight * h, weight + weight * h)) {
+                bottomwall[pos] = randb;
+            }
+            pos++;
         }
     }
-    void printmaze() {
+    bool checkbott(int parentset,int min,int max) {
+        int counter = 0;
+        for (int i = min; i <= max; i++) {
+            if (rooms.find(i) == parentset && bottomwall[i] == 1)
+                counter++;
+        }
+        return counter < rooms.setsize(parentset, min, max) - 1;
+    }
+    void unionnextline(int h) {
+        int pos = 1 + weight * h;
+        int parent = rooms.find(pos);
+        int unionelem = pos + weight;
+        for (int i = 0; i < weight; i++) {
+            bool flag = true;
+            pos = 1 + weight * h + i;
+            int newparent = rooms.find(pos);
+            if (parent != newparent) {
+                parent = newparent;
+                unionelem = pos + 1 + weight;
+                bool flag = false;
+            }
+            if (bottomwall[pos])
+                unionelem = pos + 1 + weight;
+            if (!bottomwall[pos] && flag) {
+                rooms.union_(unionelem, pos + weight);
+            }
+
+        }
+    }
+    void unioncheck(int h) {
+        int pos = 1 + weight * h;
+        for (int i = 0; i < weight - 1; i++) {
+            if (!rightwall[pos+i]) {
+                rooms.union_(pos+i, pos+i + 1);
+            }
+        }
+    }
+    void maze_generator() {
         for (int i = 0; i < height; i++) {
-            for (int j = 1; j <= weight; j++) {
-                std::cout << ((rightwall[j + weight * i] == 1) ? "    #" : "     ");
+            generaterightwalls(i);
+            generatebottomwalls(i);
+            if (i != height - 1) {
+                unionnextline(i);
             }
-            std::cout << std::endl;
-            for (int j = 1; j <= weight; j++) {
-                std::cout << ((rightwall[j + weight * i] == 1) ? "    #" : "     ");
-                //std::cout << rooms.find(j + weight * i) << ((rightwall[j + weight * i] == 1) ? "   #" : "    ");
+        }
+    }
+    void printmaze(bool db = false) {
+        if (!db) {
+            for (int i = 0; i < height; i++) {
+                for (int j = 1; j <= weight; j++) {
+                    std::cout << ((rightwall[j + weight * i] == 1) ? "    #" : "     ");
+                }
+                std::cout << std::endl;
+                for (int j = 1; j <= weight; j++) {
+                    std::cout << ((rightwall[j + weight * i] == 1) ? "    #" : "     ");
+                }
+                std::cout << std::endl;
+                for (int j = 1; j <= weight; j++) {
+                    std::cout << ((bottomwall[j + weight * i] == 1) ? "# # #" : "    #");
+                }
+                std::cout << std::endl;
             }
-            std::cout << std::endl;
-            for (int j = 1; j <= weight; j++) {
-                std::cout << ((bottomwall[j + weight * i] == 1) ? "# # #" : "    #");
+        }
+        else {
+            for (int i = 0; i < height; i++) {
+                for (int j = 1; j <= weight; j++) {
+                    std::cout << rooms.find(j + weight * i) << " ";
+                }
+                std::cout << std::endl;
             }
-            std::cout << std::endl;
         }
     }
 };
-
-//class maze {
-//    int size;
-//    bool*  rooms;
-//    bool* rightwall;
-//    bool* bottomwall;
-//    friend class DSU;
-// public:
-//    explicit maze(int _size) : size(_size) {
-//        rightwall = new bool[size * size + 1];
-//        bottomwall = new bool[size * size + 1];
-//        rooms = new bool[size * size + 1];
-//        clearmaze();
-//    }
-//    void clearmaze() {
-//        for (int i = 1; i <= size*size; i++) {
-//            rightwall[i] = 1;
-//            bottomwall[i] = 1;
-//            rooms[i] = 0;
-//        }
-//    }
-//    int generate_step(bool u, bool d, bool l, bool r) {
-//        int max = u + d + l + r;
-//        bool choose[4] = {u,d,l,r};
-//        int step = rand() % max; // 0 u, 1 d, 2 l, 3r;
-//        for (int i = 0; i < 4; i++) {
-//            if (choose[i] != 0) {
-//                if (step == 0) {
-//                    return i;
-//                }
-//                step--;
-//            }
-//        }
-//    }
-//    void generate_way_to_finish(bool dbprint = 0) {
-//        int pos = 1;
-//        while (pos != size * size) {
-//            if (dbprint) system("cls");
-//            rooms[1] = 1;
-//            bool upflag = 0;
-//            bool downflag = 0;
-//            bool rightflag = 0;
-//            bool leftflag = 0;
-//            if (pos - size > 0)
-//                upflag = (rooms[pos - size] == 0) ? 1 : 0;
-//            if (pos + size < size * size)
-//                downflag = (rooms[pos + size] == 0) ? 1 : 0;
-//            if (pos % size != 1)
-//                leftflag = (rooms[pos - 1] == 0) ? 1 : 0;
-//            if (pos % size != 0)
-//                rightflag = (rooms[pos + 1] == 0) ? 1 : 0;
-//            if (!upflag && !downflag && !rightflag && !leftflag == 1) {
-//                pos = 1;
-//                clearmaze();
-//                continue;
-//            }
-//            int dbgen = generate_step(upflag, downflag, leftflag,rightflag);
-//            switch (dbgen) {
-//            case 0: {
-//                rooms[pos - size] = 1;
-//                pos = pos - size;
-//                bottomwall[pos] = 0;
-//                break;
-//            }
-//            case 1: {
-//                rooms[pos + size] = 1;
-//                bottomwall[pos] = 0;
-//                pos = pos + size;
-//                break;
-//            }
-//            case 2: {
-//                rooms[pos - 1] = 1;
-//                pos = pos - 1;
-//                rightwall[pos] = 0;
-//                break;
-//            }
-//            case 3: {
-//                rooms[pos + 1] = 1;
-//                rightwall[pos] = 0;
-//                pos = pos + 1;
-//                break;
-//            }
-//            }
-//            if (dbprint) {
-//                dbprintmaze();
-//            }
-//        }
-//    }
-//    void dbprintmaze() {
-//        for (int i = 1; i <= size*size; i++) {
-//            if (i % size == 1)
-//                std::cout << std::endl;
-//            std::cout << rooms[i] << " ";
-//        }
-//    }
-//    void printmaze() {
-//        for (int i = 0; i < size; i++) {
-//            for (int j = 1; j <= size; j++) {
-//                std::cout << ((rightwall[j + size * i] == 1) ? "    #" : "     ");
-//            }
-//            std::cout << std::endl;
-//            for (int j = 1; j <= size; j++) {
-//                std::cout << ((rightwall[j + size * i] == 1) ? "    #" : "     ");
-//            }
-//            std::cout << std::endl;
-//            for (int j = 1; j <= size; j++) {
-//                std::cout << ((bottomwall[j + size * i] == 1) ? "# # #" : "    #");
-//            }
-//            std::cout << std::endl;
-//        }
-//    }
-//};
 
 #endif DSU_DSU_H_
