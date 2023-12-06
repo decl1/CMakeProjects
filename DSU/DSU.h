@@ -13,8 +13,8 @@ class DSU {
     explicit DSU(int _size) : size(_size) {
         graph_array = new int[size + 1];
         ranks_array = new int[size + 1];
-        graph_array[0] = -1;
-        ranks_array[0] = -1;
+        graph_array[0] = 0;
+        ranks_array[0] = 0;
         for (int i = 1; i <= size; i++) {
             graph_array[i] = i;
             ranks_array[i] = 0;
@@ -43,10 +43,16 @@ class DSU {
         if (parent_x != parent_y)
             graph_array[parent_y] = parent_x;
     }
+    void setset(int x, int val) {
+        graph_array[x] = val;
+    }
     void clearset() {
         for (int i = 1; i <= size; i++) {
             graph_array[i] = i;
         }
+    }
+    int getParent(int x) {
+        return graph_array[x];
     }
     void print() {
         for (int i = 0; i <= size; i++) {
@@ -192,6 +198,68 @@ public:
             }
         }
     }
+};
+
+class islands {
+    int** arr;
+    DSU sets;
+    int M;
+    int N;
+    int iscnt;
+ public:
+     islands(int m, int n, int** arr_) : M(m), N(n), sets(m * n), iscnt(0) { 
+         arr = new int*[m];
+         for (int i = 0; i < m; i++) {
+             arr[i] = new int[n];
+         }
+         for (int i = 0; i < m; i++) {
+             for (int j = 0; j < n; j++) {
+                 arr[i][j] = arr_[i][j];
+             }
+         }
+     }
+     islands(int m, int n, int arr_[]) : M(m), N(n), sets(m* n), iscnt(0) {
+         arr = new int* [m];
+         for (int i = 0; i < m; i++) {
+             arr[i] = new int[n];
+         }
+         for (int i = 0; i < m; i++) {
+             for (int j = 0; j < n; j++) {
+                 arr[i][j] = arr_[i*N + j];
+             }
+         }
+     }
+     void constructIslands() {
+         for (int i = 0; i < M; i++) {
+             for (int j = 0; j < N; j++) {
+                 if (j != N - 1)
+                     if (arr[i][j] == 1 && arr[i][j + 1] == 1)
+                         sets.union_((j + i * N) + 1, ((j+1) + i * N) + 1);
+                 if (i != M - 1)
+                     if (arr[i][j] == 1 && arr[i + 1][j] == 1)
+                         sets.union_((j + i * N) + 1, (j + (i+1) * N) + 1);
+
+             }
+         }
+     }
+     void tozeroset() {
+         for (int i = 0; i < M; i++) {
+             for (int j = 0; j < N; j++) {
+                 if (arr[i][j] == 0)
+                     sets.union_(0,(j + i * N)+1);
+             }
+         }
+     }
+     void cntislands() {
+         iscnt = 0;
+         for (int i = 1; i <= M * N; i++) {
+             if (sets.getParent(i) == i)
+                 iscnt++;
+         }
+     }
+     int getcnt() {
+         return iscnt;
+     }
 };
 
 #endif DSU_DSU_H_
