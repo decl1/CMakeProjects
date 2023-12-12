@@ -3,11 +3,21 @@
 #ifndef TLIST_TLIST_H_
 #define TLIST_TLIST_H_
 
+#define self (*this)
+
+template<class T>
+class Priority {
+public:
+    T data;
+    int priority;
+    Priority(T val, int pr = 0) : data(val), priority(pr) { }
+};
+
 template <class T>
 class TNode {
+ public:
     T data;
     TNode* next;
- public:
     TNode(const TNode& node) : data(node.data), next(node.next) { }
     explicit TNode(T _data, TNode* _next = nullptr) :
         data(_data), next(_next) { }
@@ -17,8 +27,8 @@ class TNode {
 template <class T>
 class TList {
     friend class TNode<T>;
-    TNode* first;
-    TNode* last;
+    TNode<T>* first;
+    TNode<T>* last;
 
  public:
     TList() : first(nullptr), last(nullptr) { }
@@ -68,8 +78,25 @@ class TList {
         delete last;
         last = p;
     }
+    void remove(int index) {
+        if (isEmpty()) return;
+        if (index == 0)
+            popfirst();
+        else if (self[index]->next == nullptr)
+            poplast(); 
+        else {
+            TNode<T>* p = first;
+            while (p) {
+                if (p->next == self[index]) {
+                    p->next = self[index]->next;
+                    break;
+                }
+                p = p->next;
+            }
+        }
+    }
     TNode<T>* operator[] (const int index) {
-        if (is_empty()) return nullptr;
+        if (isEmpty()) return nullptr;
         TNode<T>* p = first;
         for (int i = 0; i < index; i++) {
             p = p->next;

@@ -50,7 +50,7 @@ class TQueue {
         while (!isEmpty())
             pop();
     }
-    size_t size() {
+    size_t getsize() {
         return actsize;
     }
     void print() {
@@ -64,7 +64,46 @@ class TQueue {
 
 template <class T>
 class PQueue {
-    
+    TList<Priority<T>> queue;
+    size_t size;
+    size_t actsize;
+ 
+ public:
+    explicit PQueue(size_t size_) : 
+        size(size_), actsize(0), queue() { }
+    bool isFull() {
+        return size == actsize;
+    }
+    bool isEmpty() {
+        return queue.isEmpty();
+    }
+    void push(T val, int pr = 0) {
+        if (isFull()) return;
+        Priority<T> p(val, pr);
+        queue.pushback(p);
+        actsize++;
+    }
+    void popmin() {
+        if (isEmpty()) return;
+        int locprmin = queue[0]->data.priority;
+        for (int i = 1; i < actsize; i++) {
+            if (locprmin > queue[i]->data.priority) {
+                locprmin = queue[i]->data.priority;
+            }
+        }
+        for (int i = 0; i < actsize; i++) {
+            if (queue[i]->data.priority == locprmin) {
+                queue.remove(i);
+                actsize--;
+                return;
+            }
+        }
+    }
+    void print() {
+        for (int i = 0; i < actsize; i++) {
+            std::cout << queue[i]->data.data << " ";
+        }
+    }
 };
 
 #endif // TQUEUE_TQUEUE_H_

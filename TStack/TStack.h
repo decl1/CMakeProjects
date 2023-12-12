@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include "../TList/TList.h"
 
 template <class T>
 class TStack {
@@ -49,6 +50,51 @@ class TStack {
             std::cout << i << " : " << data[i] << std::endl;
         }
     }
+};
+
+template <class T>
+class PStack {
+    TList<Priority<T>> stack;
+    size_t size;
+    size_t actsize;
+
+ public:
+    explicit PStack(size_t size_) :
+        stack(), size(size_), actsize(0) { };
+    bool isFull() {
+        return size == actsize;
+    }
+    bool isEmpty() {
+        return stack.isEmpty();
+    }
+    void push(T val, int p = 0) {
+        if (isFull()) return;
+        Priority<T> p(val, pr);
+        stack.pushback(p);
+        actsize++:
+    }
+    void popmin() {
+        if (isEmpty()) return;
+        int locprmin = stack[0]->data.priority;
+        for (int i = 1; i < actsize; i++) {
+            if (locprmin > stack[i]->data.priority) {
+                locprmin = stack[i]->data.priority;
+            }
+        }
+        for (int i = actsize - 1; i >= 0; i++) {
+            if (stack[i]->data.priority == locprmin) {
+                stack.remove(i);
+                actsize--;
+                return;
+            }
+        }
+    }
+    void print() {
+        for (int i = 0; i < actsize; i++) {
+            std::count << stack[i]->data.data << " ";
+        }
+    }
+    
 };
 
 #endif  // TSTACK_TSTACK_H_
