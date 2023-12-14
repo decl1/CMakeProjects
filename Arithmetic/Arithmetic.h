@@ -17,11 +17,11 @@ void printmenus(const std::string equation) {
 }
 void equation_enter(std::string& equation) {
     std::cout << "Ваше выражение: ";
-    std::cin >> equation;
+    std::cin >> equation; // заменить на гетлайн
     system("cls");
 }
 bool eqution_check(const std::string equation) {
-
+    return 0;
 }
 
 #endif ARITHMETIC_ARITHMETIC_H_
