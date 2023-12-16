@@ -4,6 +4,7 @@
 #define ARITHMETIC_ARITHMETIC_H_
 
 #include <iostream>
+#include <string>
 
 void printmenus(const std::string equation) {
     std::cout << "Ваше выражение: " << equation << std::endl << std::endl;
@@ -17,7 +18,7 @@ void printmenus(const std::string equation) {
 }
 void equation_enter(std::string& equation) {
     std::cout << "Ваше выражение: ";
-    std::cin >> equation; // заменить на гетлайн
+    
     system("cls");
 }
 bool eqution_check(const std::string equation) {

@@ -51,8 +51,12 @@ double mexp(double x, int calcdepth = 4) {
     return ret;
 }
 
-double mln(double x, int calcdept = 3) {
-    ;
+double mln(double x, int calcdepth = 3) {
+    double ret = 0;
+    for (int n = 1; n <= calcdepth; n++) {
+        ret += (pow(-1, n + 1) / n) * pow((x - 1), n);
+    }
+    return ret;
 }
 
 #endif
