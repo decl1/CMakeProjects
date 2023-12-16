@@ -18,7 +18,7 @@ void printmenus(const std::string equation) {
 }
 void equation_enter(std::string& equation) {
     std::cout << "Ваше выражение: ";
-    
+    std::getline(std::cin,equation);
     system("cls");
 }
 bool eqution_check(const std::string equation) {

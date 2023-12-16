@@ -13,15 +13,27 @@ int main() {
     bool eqflag = 0;
     // Code
     equation_enter(equation);
-    while (1) {
+    while (!eqflag) {
         int menuswitch = 0;
         printmenus(equation);
         std::cin >> menuswitch;
         switch (menuswitch) {
-            default: {
-                system("cls");
-                continue;
-            }
+        case(4): {
+            system("cls");
+            std::cin.ignore();
+            equation = "";
+            equation_enter(equation);
+            break;
+        }
+        case(5): {
+            system("cls");
+            eqflag = 1;
+            break;
+        }
+        default: {
+            system("cls");
+            continue;
+        }
         }
     }
 }
