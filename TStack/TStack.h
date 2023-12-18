@@ -38,10 +38,10 @@ class TStack {
     void pop() {
         if ( isEmpty() )
             throw;
-        top--;
+        _top--;
     }
     void push(const T& n) {
-        if ( isFull )
+        if ( isFull() )
             throw std::logic_error("push to full stack");
         data[++_top] = n;
     }
