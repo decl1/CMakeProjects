@@ -5,6 +5,11 @@
 void main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    Parcer exp(equation_enter());
-    exp.brackets_check();
+    while (1) {
+        Parcer exp(equation_enter());
+        exp.brackets_check();
+        exp.syntax_check();
+        std::cerr << std::endl;
+        system("pause");
+    }
 }
