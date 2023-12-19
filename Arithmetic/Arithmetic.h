@@ -44,7 +44,7 @@ class Parcer {
                     }
                     else {
                         std::cerr << std::string(throw_location, ' ')
-                            << " ^ - unexpected bracket";
+                            << " ^ - unexpected bracket" << std::endl;
                         return throw_location;
                     }
                 }
@@ -54,7 +54,7 @@ class Parcer {
                     }
                     else {
                         std::cerr << std::string(throw_location, ' ')
-                            << " ^ - unexpected bracket";
+                            << " ^ - unexpected bracket" << std::endl;
                         return throw_location;
                     }
                 }
@@ -64,7 +64,7 @@ class Parcer {
                     }
                     else {
                         std::cerr << std::string(throw_location, ' ')
-                            << " ^ - unexpected bracket";
+                            << " ^ - unexpected bracket" << std::endl;
                         return throw_location;
                     }
                 }
@@ -76,7 +76,7 @@ class Parcer {
             return 0;
         }
         else {
-            std::cerr << "error: close the bracket!";
+            std::cerr << "error: close the bracket!" << std::endl;
             return throw_location;
         }
     }
@@ -107,7 +107,7 @@ class Parcer {
                         }
                         if (nums.find(expression[i]) != std::string::npos) {
                             std::cerr << std::string(throw_location + i, ' ')
-                                << " ^ - unexpected symbol";
+                                << " ^ - unexpected symbol" << std::endl;
                             return throw_location + i;
                         }
                     }
@@ -117,7 +117,7 @@ class Parcer {
                         }
                         if (letts.find(expression[i]) != std::string::npos) {
                             std::cerr << std::string(throw_location + i, ' ')
-                                << " ^ - unexpected symbol";
+                                << " ^ - unexpected symbol" << std::endl;
                             return throw_location + i;
                         }
                     }
@@ -126,7 +126,7 @@ class Parcer {
                 }
                 else {
                     std::cerr << std::string(throw_location + i, ' ')
-                        << " ^ - unexpected symbol";
+                        << " ^ - unexpected symbol" << std::endl;
                     return throw_location + i;
                 }
                 break;
@@ -136,13 +136,17 @@ class Parcer {
                     state = 1;
                     continue;
                 }
+                else if (c == '(' || c == '[' || c == '{') {
+                    state = 0;
+                    continue;
+                }
                 else if (arithop.find(c) != std::string::npos) {
                     state = 0;
                     continue;
                 }
                 else {
                     std::cerr << std::string(throw_location + i, ' ')
-                        << " ^ - unexpected symbol";
+                        << " ^ - unexpected symbol" << std::endl;
                     return throw_location + i;
                 }
                 break;
@@ -150,7 +154,7 @@ class Parcer {
             case 2: {
                 if (state2.find(c) == std::string::npos || c == '.') {
                     std::cerr << std::string(throw_location + i, ' ')
-                        << " ^ - unexpected symbol";
+                        << " ^ - unexpected symbol" << std::endl;
                     return throw_location + i;
                 }
                 else {
@@ -160,65 +164,175 @@ class Parcer {
             }
             }
         }
+        return 0;
     }
     int varcon_check() {
         std::string nums = "0123456789.";
         std::string letts = "qwertyuiopasdfghjklzxcvbnm";
-        // consts check ===========================
-        //      . in first pos  ->   throw
-        //  0 in [0]; . !in [1] ->   throw
-        //                 any  ->   to end or dot
-        //       . in last pos  ->   throw
-        // 
-        // vars check =============================
-        // push all symbols to string::S;
-        //      len S > 1:
-        //          sin cos tg ctg exp ln <- check
-        //                 else throw;
-        //      len S == 1:
-        //          save var
-        //      else:
-        //          throw
+        int throw_location = 15;
+        int incase = 0;
+        std::string temp = "";
+        char c;
+        int tmpdot = 0;
+        for (int i = 0; i < expression.length(); i++) {
+            c = expression[i];
+            if (nums.find(c) != std::string::npos) {
+                incase++;
+            }
+            else {
+                incase = 0;
+            }
+            if (incase > 0) {
+                if (c == '.' && incase == 1) {
+                    std::cerr << std::string(throw_location + i, ' ')
+                        << " ^ - '.' on first position" << std::endl;
+                    return throw_location + i;
+                }
+                if (i != expression.length() - 1 && c == '0'&& incase == 1 
+                    && expression[i + 1] != '.') {
+                    std::cerr << std::string(throw_location + i, ' ')
+                        << " ^ - unexpected zero" << std::endl;
+                    return throw_location + i;
+                }
+                if (c == '.') {
+                    tmpdot++;
+                    if (tmpdot > 1) {
+                        std::cerr << std::string(throw_location + i, ' ')
+                            << " ^ - unexpected dot" << std::endl;
+                        return throw_location + i;
+                    }
+                }
+                if (i == expression.length() - 1 && c == '.' ||
+                    i != expression.length() - 1 && c == '.' &&
+                    nums.find(expression[i + 1]) == std::string::npos) {
+                    std::cerr << std::string(throw_location + i, ' ')
+                        << " ^ - unexpected dot" << std::endl;
+                    return throw_location + i;
+                }
+            }
+        }
+        incase = 0;
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression[i];
+            if (i == expression.length() - 1 && incase > 1) {
+                std::cerr << std::string(throw_location + i - 1, ' ')
+                    << " ^ - unkown name or missed '(arg)'" << std::endl;
+                return throw_location + i;
+            }
+            if (letts.find(c) != std::string::npos) {
+                incase++;
+                temp += c;
+            }
+            else {
+                if (incase == 0) {
+                    continue;
+                }
+                if (incase == 2) {
+                    if (temp != "ln") {
+                        std::cerr << std::string(throw_location + i-1, ' ')
+                            << " ^ - unkown name2" << std::endl;
+                        return throw_location + i;
+                    }
+                }
+                if (incase == 3) {
+                    if (temp != "sin" && temp != "cos" &&
+                        temp != "tan" && temp != "exp") {
+                        std::cerr << std::string(throw_location + i-1, ' ')
+                            << " ^ - unkown name3" << std::endl;
+                        return throw_location + i;
+                    }
+                }
+                if (incase == 4) {
+                    if (temp != "ctan") {
+                        std::cerr << std::string(throw_location + i -1, ' ')
+                            << " ^ - unkown name4" << std::endl;
+                        return throw_location + i;
+                    }
+                }
+                if (incase > 4) {
+                    std::cerr << std::string(throw_location + i-1, ' ')
+                        << " ^ - unkown name5" << std::endl;
+                    return throw_location + i;
+                }
+                incase = 0;
+                temp = "";
+            }
+        }
+        return 0;
     }
-    // const check, trigonomety check func
-    Expression parce() {
+    bool parce() {
         delete_spaces();
-        brackets_check();
-        syntax_check();
-        // const check, trigonomety check func
-        // reverse poland;
+        int check = 0;
+        check += brackets_check();
+        check += syntax_check();
+        check += varcon_check();
+        if (check) return 1;
+        return 0;
+    }
+    std::string getexp() {
+        return expression;
     }
 };
 
 class Expression {
+    friend class Parcer;
     std::string expression;
     std::string reverse_poland;
-    Var* vars;
-    double* consts;
+    size_t varscnt;
+    Var vars[26];
  public:
-    Expression() {
-        expression  = "";
+    explicit Expression(Parcer& par) {
+        if(par.parce()) throw std::logic_error("parce err");
+        expression = par.getexp();
         reverse_poland = "";
-        vars = new Var[26];
-        consts = new double[50];
-        vars = nullptr;
-        consts = nullptr;
-    }
-    explicit Expression(Expression& exp) {
-        expression = exp.expression;
-        reverse_poland = exp.reverse_poland;
+        varscnt = 0;
         for (int i = 0; i < 26; i++) {
-            vars[i] = exp.vars[i];
-        }
-        for (int i = 0; i < 50; i++) {
-            consts[i] = exp.consts[i];
+            vars[i].name = '.';
+            vars[i].val = 0;
         }
     }
     void init_vars() {
-        ;
+        std::string letts = "qwertyuiopasdfghjklzxcvbnm";
+        char c;
+        int varscnt = 0;
+        int inrow = 0;
+        std::string vars_inited = "";
+        Var var;
+        var.name = NULL;
+        var.val = NULL;
+        for (int i = 0; i < expression.length(); i++) {
+            c = expression[i];
+            if (letts.find(c) != std::string::npos) {
+                inrow++;
+            }
+            else if (i == expression.length() - 1 &&
+                letts.find(c) != std::string::npos) {
+                var.name = expression[i - 1];
+                vars_inited += var.name;
+                vars[varscnt] = var;
+                varscnt++;
+            }
+            else {
+                if (inrow == 1 &&
+                    vars_inited.find(expression[i - 1]) == std::string::npos) {
+                    var.name = expression[i - 1];
+                    vars_inited += var.name;
+                    vars[varscnt] = var;
+                    varscnt++;
+                }
+                inrow = 0;
+            }
+        }
     }
     void calculate() {
         ; // need reverse poland
+    }
+    void get_Vars() {
+        init_vars();
+        for (int i = 0; i < varscnt; i++) {
+            std::cout << i << vars[i].name << " - " << vars[i].val
+                << std::endl;
+        }
     }
 };
 
