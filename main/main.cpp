@@ -8,11 +8,12 @@ void main() {
     while (1) {
         Parcer pexp(equation_enter());
         try {
-            Expression exp(pexp);
-            exp.get_Vars();
+            pexp.parce();
         }
         catch(std::logic_error) {
             std::cerr << "PARCE ERROR" << std::endl;
+            continue;
         }
+        Expression exp(pexp);
     }
 }

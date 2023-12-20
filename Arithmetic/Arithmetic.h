@@ -238,20 +238,20 @@ class Parcer {
                     if (temp != "sin" && temp != "cos" &&
                         temp != "tan" && temp != "exp") {
                         std::cerr << std::string(throw_location + i-1, ' ')
-                            << " ^ - unkown name3" << std::endl;
+                            << " ^ - unkown name" << std::endl;
                         return throw_location + i;
                     }
                 }
                 if (incase == 4) {
                     if (temp != "ctan") {
                         std::cerr << std::string(throw_location + i -1, ' ')
-                            << " ^ - unkown name4" << std::endl;
+                            << " ^ - unkown name" << std::endl;
                         return throw_location + i;
                     }
                 }
                 if (incase > 4) {
                     std::cerr << std::string(throw_location + i-1, ' ')
-                        << " ^ - unkown name5" << std::endl;
+                        << " ^ - unkown name" << std::endl;
                     return throw_location + i;
                 }
                 incase = 0;
@@ -260,14 +260,13 @@ class Parcer {
         }
         return 0;
     }
-    bool parce() {
+    void parce() {
         delete_spaces();
         int check = 0;
         check += brackets_check();
         check += syntax_check();
         check += varcon_check();
-        if (check) return 1;
-        return 0;
+        if (check) throw std::logic_error("parce err");
     }
     std::string getexp() {
         return expression;
@@ -282,7 +281,7 @@ class Expression {
     Var vars[26];
  public:
     explicit Expression(Parcer& par) {
-        if(par.parce()) throw std::logic_error("parce err");
+        //par.parce();
         expression = par.getexp();
         reverse_poland = "";
         varscnt = 0;
@@ -291,49 +290,68 @@ class Expression {
             vars[i].val = 0;
         }
     }
+    void init_var(char x) {
+        for (int i = 0; i < 26; i++) {
+            if (vars[i].name == x) {
+                return;
+            }
+        }
+        Var var_;
+        var_.name = x;
+        var_.val = 0;
+        vars[varscnt] = var_;
+        varscnt++;
+    }
     void init_vars() {
         std::string letts = "qwertyuiopasdfghjklzxcvbnm";
-        char c;
-        int varscnt = 0;
-        int inrow = 0;
-        std::string vars_inited = "";
-        Var var;
-        var.name = NULL;
-        var.val = NULL;
+        char pc,c,nc;
         for (int i = 0; i < expression.length(); i++) {
             c = expression[i];
-            if (letts.find(c) != std::string::npos) {
-                inrow++;
+            if(i == 0){
+                nc = expression[i+1];
+                if (letts.find(c) != std::string::npos &&
+                    letts.find(nc) == std::string::npos) {
+                    init_var(c);
+                }
             }
-            else if (i == expression.length() - 1 &&
-                letts.find(c) != std::string::npos) {
-                var.name = expression[i - 1];
-                vars_inited += var.name;
-                vars[varscnt] = var;
-                varscnt++;
+            else if (i == expression.length() - 1) {
+                pc = expression[i - 1];
+                if (letts.find(c) != std::string::npos &&
+                    letts.find(pc) == std::string::npos) {
+                    init_var(c);
+                }
             }
             else {
-                if (inrow == 1 &&
-                    vars_inited.find(expression[i - 1]) == std::string::npos) {
-                    var.name = expression[i - 1];
-                    vars_inited += var.name;
-                    vars[varscnt] = var;
-                    varscnt++;
+                nc = expression[i + 1];
+                pc = expression[i - 1];
+                if (letts.find(c) != std::string::npos &&
+                    letts.find(pc) == std::string::npos &&
+                    letts.find(nc) == std::string::npos) {
+                    init_var(c);
                 }
-                inrow = 0;
             }
+        }
+    }
+    void set_vars() {
+        double tmp;
+        for (int i = 0; i < varscnt; i++) {
+            std::cout << vars[i].name << " = ";
+            std::cin >> tmp;
         }
     }
     void calculate() {
         ; // need reverse poland
     }
+    // db func...
     void get_Vars() {
+        std::cout << expression << std::endl;
         init_vars();
         for (int i = 0; i < varscnt; i++) {
             std::cout << i << vars[i].name << " - " << vars[i].val
                 << std::endl;
         }
     }
+    //
 };
 
 std::string equation_enter() {
